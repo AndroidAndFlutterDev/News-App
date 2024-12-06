@@ -1,6 +1,6 @@
 package com.example.newsapp.util
 
-class Constans {
+class Constants {
 
     companion object {
         const val API_KEY = "f0810d46d6de4f1d89b596ac8381e66c"
