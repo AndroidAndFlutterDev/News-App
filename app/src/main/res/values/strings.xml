@@ -13,4 +13,7 @@
     <string name="welcome">Your window to the World</string>
     <string name="welcome_2">Discover the most exiting and informative news</string>
     <string name="get_started">Get Started</string>
+    <string name="lostInternetConnection">No internet connection</string>
+    <string name="no_signal">No signal</string>
+    <string name="succesfully_added_to_favourites">Added to Favourites</string>
 </resources>
