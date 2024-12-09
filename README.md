@@ -39,4 +39,4 @@ Here’s the fun part: this challenge isn’t just about debugging and coding—
 
 1. Clone this repository to your local machine:
    ```bash
-   git clone https://github.com/your-repo-link-here
+   git clone https://github.com/AndroidAndFlutterDev/News-App
