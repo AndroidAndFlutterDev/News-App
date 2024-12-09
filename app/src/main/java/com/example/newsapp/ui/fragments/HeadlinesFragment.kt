@@ -22,7 +22,7 @@ import com.example.newsapp.ui.VM.NewsViewModel
 import com.example.newsapp.util.Constants
 import com.example.newsapp.util.Resource
 
-class HeadlinesFragment : Fragment() {
+class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
 
     lateinit var newsViewModel: NewsViewModel
     lateinit var newsAdapter: NewsAdapter
@@ -38,7 +38,8 @@ class HeadlinesFragment : Fragment() {
 
         itemHeadlinesError = view.findViewById(R.id.itemHeadlinesError)
 
-        val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val inflater =
+            requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val errorView: View = inflater.inflate(R.layout.item_error, null)
 
         retryButton = errorView.findViewById(R.id.retryButton)
@@ -51,16 +52,16 @@ class HeadlinesFragment : Fragment() {
             val bundle = Bundle().apply {
                 putSerializable("article", it)
             }
-            findNavController().navigate(R.id.action_headlinesFragment2_to_articleFragment, bundle)
+            findNavController().navigate(R.id.action_headlinesFragment_to_articleFragment, bundle)
         }
 
         newsViewModel.headlines.observe(viewLifecycleOwner, Observer { response ->
-            when (response){
+            when (response) {
                 is Resource.Error -> {
                     hideProgressBar()
-                    response.message?.let {message ->
+                    response.message?.let { message ->
                         Toast.makeText(activity, "Sorry error: $message", Toast.LENGTH_LONG).show()
-                        showErrorMessage(message.toString())
+                        showErrorMessage(message)
                     }
                 }
 
@@ -73,7 +74,7 @@ class HeadlinesFragment : Fragment() {
                         newsAdapter.differ.submitList(newsResponse.articles.toList())
                         val totalPages = newsResponse.totalResults / Constants.QUERY_PAGE_SIZE + 2
                         isLastPage = newsViewModel.headlinesPage == totalPages
-                        if (isLastPage){
+                        if (isLastPage) {
                             binding.recyclerHeadlines.setPadding(0, 0, 0, 0)
                         }
                     }
@@ -91,28 +92,28 @@ class HeadlinesFragment : Fragment() {
     var isLastPage = false
     var isScrolling = false
 
-    private fun hideProgressBar(){
+    private fun hideProgressBar() {
         binding.paginationProgressBar.visibility = View.INVISIBLE
         isLoading = false
     }
 
-    private fun showProgressBar(){
+    private fun showProgressBar() {
         binding.paginationProgressBar.visibility = View.VISIBLE
         isLoading = true
     }
 
-    private fun hideErrorMessage(){
+    private fun hideErrorMessage() {
         itemHeadlinesError.visibility = View.INVISIBLE
         isError = false
     }
 
-    private fun showErrorMessage(message: String){
+    private fun showErrorMessage(message: String) {
         itemHeadlinesError.visibility = View.VISIBLE
         errorText.text = message
         isError = true
     }
 
-    val scrollListener = object: RecyclerView.OnScrollListener(){
+    val scrollListener = object : RecyclerView.OnScrollListener() {
 
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
@@ -127,9 +128,10 @@ class HeadlinesFragment : Fragment() {
             val isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount
             val isNotAtBeginning = firstVisibleItemPosition >= 0
             val isTotalNireThanVisible = totalItemCount >= Constants.QUERY_PAGE_SIZE
-            val shouldPaginate = isNoError && isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning && isTotalNireThanVisible && isScrolling
+            val shouldPaginate =
+                isNoError && isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning && isTotalNireThanVisible && isScrolling
             if (shouldPaginate) {
-                newsViewModel.getHeadlines(Constants.COUNTRY_CODE)
+                newsViewModel.getHeadlines(countryCode = Constants.COUNTRY_CODE)
                 isScrolling = false
             }
         }
@@ -137,18 +139,18 @@ class HeadlinesFragment : Fragment() {
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
 
-            if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
+            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                 isScrolling = true
             }
         }
     }
 
-        private fun setupHeadlinesRecycler(){
-            newsAdapter = NewsAdapter()
-            binding.recyclerHeadlines.apply {
-                adapter = newsAdapter
-                layoutManager = LinearLayoutManager(activity) // = GridLayoutManager(activity, 1)
-                addOnScrollListener(this@HeadlinesFragment.scrollListener)
+    private fun setupHeadlinesRecycler() {
+        newsAdapter = NewsAdapter()
+        binding.recyclerHeadlines.apply {
+            adapter = newsAdapter
+            layoutManager = LinearLayoutManager(activity) // = GridLayoutManager(activity, 1)
+            addOnScrollListener(this@HeadlinesFragment.scrollListener)
         }
     }
 }

@@ -16,4 +16,6 @@
     <string name="lostInternetConnection">No internet connection</string>
     <string name="no_signal">No signal</string>
     <string name="succesfully_added_to_favourites">Added to Favourites</string>
+    <string name="deleted_from_favourites">Removed from Favourites</string>
+    <string name="undo">Undo</string>
 </resources>

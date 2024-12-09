@@ -112,12 +112,12 @@ class NewsViewModel(app: Application, val newsRepository: NewsRepository): Andro
                 val response = newsRepository.getHeadlines(countryCode, headlinesPage)
                 headlines.postValue(handleHeadlineResponse(response))
             } else {
-                headlines.postValue(Resource.Error(R.string.lostInternetConnection))
+                headlines.postValue(Resource.Error("No Internet Connection..."))
             }
         } catch (t: Throwable){
             when (t){
-                is IOException -> headlines.postValue(Resource.Error(R.string.lostInternetConnection))
-                else -> headlines.postValue(Resource.Error(R.string.no_signal))
+                is IOException -> headlines.postValue(Resource.Error("No Internet Connection..."))
+                else -> headlines.postValue(Resource.Error("No signal"))
             }
         }
     }
@@ -127,15 +127,15 @@ class NewsViewModel(app: Application, val newsRepository: NewsRepository): Andro
         searchNews.postValue(Resource.Loading())
         try {
             if (internetConnection(this.getApplication())){
-                val response = newsRepository.searchForNews(searchQuery, searchNewsPage)
+                val response = newsRepository.searchNews(searchQuery, searchNewsPage)
                 searchNews.postValue(handleSearchNewsResponse(response))
             } else {
-                searchNews.postValue(Resource.Error(R.string.lostInternetConnection))
+                searchNews.postValue(Resource.Error("No Internet Connection..."))
             }
         } catch (t: Throwable){
             when (t){
-                is IOException -> searchNews.postValue(Resource.Error(R.string.lostInternetConnection))
-                else -> searchNews.postValue(Resource.Error(R.string.no_signal))
+                is IOException -> searchNews.postValue(Resource.Error("No Internet Connection..."))
+                else -> searchNews.postValue(Resource.Error("No Signal..."))
             }
         }
     }
